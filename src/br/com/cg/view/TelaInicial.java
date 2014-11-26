@@ -1,5 +1,6 @@
 package br.com.cg.view;
 
+import static br.com.cg.algoritmos.AlgoritmoBresenham.getCaminho;
 import static java.lang.Integer.parseInt;
 import static javafx.geometry.Pos.CENTER;
 import static javafx.geometry.Pos.TOP_LEFT;
@@ -23,7 +24,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import br.com.cg.algoritmos.AlgoritmoBresenham;
 import br.com.cg.model.ComponenteCirculo;
 
 public class TelaInicial extends Application {
@@ -42,14 +42,16 @@ public class TelaInicial extends Application {
 
 	private ComponenteCirculo pontoInicial;
 	private ComponenteCirculo pontoFinal;
-	
+
 	private List<List<ComponenteCirculo>> matrizCirculos;
+	List<ComponenteCirculo> caminhoCalculado;
 
 	private int tamanhoMatriz;
 
 	public TelaInicial() {
 		tamanhoMatriz = 0;
 		matrizCirculos = new ArrayList<List<ComponenteCirculo>>();
+		caminhoCalculado = new ArrayList<ComponenteCirculo>();
 	}
 
 	public void show(String[] args) {
@@ -74,25 +76,25 @@ public class TelaInicial extends Application {
 	}
 
 	private void inicializaComponentes() {
-		lblDigiteTamanho = new Label("Digite um número de linhas/colunas: ");
-
+		lblDigiteTamanho = new Label("Linhas/colunas:");
 		txtSizeMatriz = new TextField();
 
 		btnGerar = new Button("Gerar!");
+		btnGerar.setStyle("-fx-base: #b6e7c9;");
 		btnGerar.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				btnGerarAction();
 			}
 		});
-		
+
 		btnLimparMatriz = new Button("Limpar seleções");
 		btnLimparMatriz.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				if(paneCirculos.getChildren().isEmpty())
+				if (paneCirculos.getChildren().isEmpty())
 					return;
-				
+
 				limpaDadosMatriz();
 			}
 		});
@@ -116,19 +118,20 @@ public class TelaInicial extends Application {
 	}
 
 	private void geraMatrizDeCirculos() {
-		if(!matrizCirculos.isEmpty())
+		if (!matrizCirculos.isEmpty())
 			limpaMatrizAtual();
+		
+		double raio = (pane.getPrefWidth() - 10 * (tamanhoMatriz)) / (tamanhoMatriz * 2);
 
 		for (int i = 0; i < tamanhoMatriz; i++) {
 			matrizCirculos.add(i, new ArrayList<ComponenteCirculo>());
-			
+
 			for (int j = 0; j < tamanhoMatriz; j++) {
-				ComponenteCirculo circulo = criaCirculo(i, j);
+				ComponenteCirculo circulo = criaCirculo(i, j, raio);
 				matrizCirculos.get(i).add(j, circulo);
 				paneCirculos.addRow(i, circulo);
 			}
 		}
-
 	}
 
 	private void limpaMatrizAtual() {
@@ -136,11 +139,9 @@ public class TelaInicial extends Application {
 		paneCirculos.getChildren().clear();
 	}
 
-	private ComponenteCirculo criaCirculo(int linha, int coluna) {
+	private ComponenteCirculo criaCirculo(int linha, int coluna, double raio) {
 		final ComponenteCirculo circulo = new ComponenteCirculo(coluna, linha);
-		circulo.setCenterX(50);
-		circulo.setCenterY(50);
-		circulo.setRadius(25);
+		circulo.setRadius(raio);
 
 		circulo.setOnMouseClicked(new EventHandler<Event>() {
 			@Override
@@ -181,7 +182,7 @@ public class TelaInicial extends Application {
 
 	private void inicializaConfiguracoesPane() {
 		pane = new AnchorPane();
-		pane.setPrefSize(800, 600);
+		pane.setPrefSize(800, 620);
 		pane.getChildren().addAll(vLayout);
 	}
 
@@ -199,11 +200,30 @@ public class TelaInicial extends Application {
 			pontoFinal.resetaCor();
 
 		if (!circulo.equals(pontoInicial)) {
+			limpaExecucaoAlgoritmo();
 			circulo.selecionaCirculo();
 			pontoFinal = circulo;
-			AlgoritmoBresenham.calcula(pontoInicial, pontoFinal, matrizCirculos);
+			caminhoCalculado = getCaminho(pontoInicial, pontoFinal, matrizCirculos);
+			selecionaCaminho(caminhoCalculado);
 		} else
 			pontoFinal = null;
+	}
+
+	private void selecionaCaminho(List<ComponenteCirculo> caminho) {
+		for (ComponenteCirculo circulo : caminho)
+			circulo.selecionaCirculo();
+	}
+
+	private void limpaExecucaoAlgoritmo() {
+		if(caminhoCalculado.isEmpty())
+			return;
+		
+		for (ComponenteCirculo circulo : caminhoCalculado) {
+			if(circulo.equals(pontoInicial) || circulo.equals(pontoFinal))
+				continue;
+			
+			circulo.resetaCor();
+		}
 	}
 
 	private void setPontoInicial(final ComponenteCirculo circulo) {
@@ -216,7 +236,7 @@ public class TelaInicial extends Application {
 		pontoFinal = null;
 
 		for (Node circulo : paneCirculos.getChildren())
-			((ComponenteCirculo)circulo).resetaCor();
+			((ComponenteCirculo) circulo).resetaCor();
 	}
 
 }

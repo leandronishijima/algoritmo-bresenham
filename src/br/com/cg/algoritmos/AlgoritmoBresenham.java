@@ -1,12 +1,15 @@
 package br.com.cg.algoritmos;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.cg.model.ComponenteCirculo;
 
 public class AlgoritmoBresenham {
 	
-	public static void calcula(ComponenteCirculo ponto1, ComponenteCirculo ponto2, List<List<ComponenteCirculo>> matrizCirculos) {
+	public static List<ComponenteCirculo> getCaminho(ComponenteCirculo ponto1, ComponenteCirculo ponto2, List<List<ComponenteCirculo>> matrizCirculos) {
+		
+		List<ComponenteCirculo> caminho = new ArrayList<ComponenteCirculo>();
 		
 		int x1 = ponto1.getLinha();
 		int y1 = ponto1.getColuna();
@@ -15,28 +18,27 @@ public class AlgoritmoBresenham {
 		
 		int dx = Math.abs(x2 - x1);
 	    int dy = Math.abs(y2 - y1);
-	    int rozdil = dx - dy;
+	    int abs = dx - dy;
 
-	    int posun_x, posun_y;
+	    int posX, posY;
 
-	    if (x1 < x2) posun_x = 1; else posun_x = -1;
-	    if (y1 < y2) posun_y = 1; else posun_y = -1;
+	    posX = (x1 < x2) ? 1 : -1;
+	    posY = (y1 < y2) ? 1 : -1;
 
 	    while ((x1 != x2) || (y1 != y2)) {  
-
-	        int p = 2 * rozdil;
+	        int p = 2 * abs;
 
 	        if (p > -dy) {
-	            rozdil = rozdil - dy;
-	            x1 = x1 + posun_x;
+	            abs = abs - dy;
+	            x1 = x1 + posX;
 	        }
 	        if (p < dx) {
-	            rozdil = rozdil + dx;
-	            y1 = y1 + posun_y;
+	            abs = abs + dx;
+	            y1 = y1 + posY;
 	        }
-	        matrizCirculos.get(x1).get(y1).selecionaCirculo();
+	        caminho.add(matrizCirculos.get(x1).get(y1));
 	    }
+
+	    return caminho;
 	}
-	
-	
 }

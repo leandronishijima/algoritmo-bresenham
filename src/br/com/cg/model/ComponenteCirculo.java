@@ -1,7 +1,7 @@
 package br.com.cg.model;
 
 import static java.lang.String.format;
-import static javafx.scene.paint.Color.BLUE;
+import static javafx.scene.paint.Color.BLACK;
 import static javafx.scene.paint.Color.GREY;
 import javafx.scene.shape.Circle;
 
@@ -25,7 +25,7 @@ public class ComponenteCirculo extends Circle {
 	}
 	
 	public void selecionaCirculo() {
-		setFill(BLUE);
+		setFill(BLACK);
 	}
 	
 	public void resetaCor() {
