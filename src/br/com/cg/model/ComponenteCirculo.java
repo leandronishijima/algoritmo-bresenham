@@ -1,7 +1,7 @@
 package br.com.cg.model;
 
 import static javafx.scene.paint.Color.BLUE;
-import static javafx.scene.paint.Color.WHITE;
+import static javafx.scene.paint.Color.GREY;
 import javafx.scene.shape.Circle;
 
 public class ComponenteCirculo extends Circle {
@@ -28,7 +28,7 @@ public class ComponenteCirculo extends Circle {
 	}
 	
 	public void resetaCor() {
-		setFill(WHITE);
+		setFill(GREY);
 	}
 	
 }

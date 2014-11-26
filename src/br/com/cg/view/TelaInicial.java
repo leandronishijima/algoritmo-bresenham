@@ -137,9 +137,9 @@ public class TelaInicial extends Application {
 
 	private ComponenteCirculo criaCirculo(int linha, int coluna) {
 		final ComponenteCirculo circulo = new ComponenteCirculo(coluna, linha);
-		circulo.setCenterX(100);
-		circulo.setCenterY(100);
-		circulo.setRadius(50);
+		circulo.setCenterX(50);
+		circulo.setCenterY(50);
+		circulo.setRadius(25);
 
 		circulo.setOnMouseClicked(new EventHandler<Event>() {
 			@Override
@@ -172,7 +172,6 @@ public class TelaInicial extends Application {
 		paneCirculos.setAlignment(CENTER);
 		paneCirculos.setHgap(10);
 		paneCirculos.setVgap(10);
-		paneCirculos.setStyle("-fx-background-color: black;");
 
 		vLayoutCirculos = new VBox();
 		vLayoutCirculos.setSpacing(5);
