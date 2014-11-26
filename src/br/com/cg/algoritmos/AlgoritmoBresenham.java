@@ -8,29 +8,34 @@ public class AlgoritmoBresenham {
 	
 	public static void calcula(ComponenteCirculo ponto1, ComponenteCirculo ponto2, List<List<ComponenteCirculo>> matrizCirculos) {
 		
-		int x;
-		int x1 = ponto1.getColuna();
-		int x2 = ponto1.getLinha();
-		int y1 = ponto2.getColuna();
-		int y2 = ponto2.getLinha();
-		int y = y1;
-		int erro = 0;
+		int x1 = ponto1.getLinha();
+		int y1 = ponto1.getColuna();
+		int x2 = ponto2.getLinha();
+		int y2 = ponto2.getColuna();
 		
-		int numerador = y2 - y1;
-		int denominador = x2 - x1;
-		int threshold = denominador/2;
-		
-		for (x = x1; x < x2; x++) {
-			matrizCirculos.get(x).get(y).selecionaCirculo();
-			erro -= numerador;
-			
-			if(erro > threshold) {
-				erro -= denominador;
-				y++;
-			}
-		}
-		
-		matrizCirculos.get(x).get(y).selecionaCirculo();
+		int dx = Math.abs(x2 - x1);
+	    int dy = Math.abs(y2 - y1);
+	    int rozdil = dx - dy;
+
+	    int posun_x, posun_y;
+
+	    if (x1 < x2) posun_x = 1; else posun_x = -1;
+	    if (y1 < y2) posun_y = 1; else posun_y = -1;
+
+	    while ((x1 != x2) || (y1 != y2)) {  
+
+	        int p = 2 * rozdil;
+
+	        if (p > -dy) {
+	            rozdil = rozdil - dy;
+	            x1 = x1 + posun_x;
+	        }
+	        if (p < dx) {
+	            rozdil = rozdil + dx;
+	            y1 = y1 + posun_y;
+	        }
+	        matrizCirculos.get(x1).get(y1).selecionaCirculo();
+	    }
 	}
 	
 	
