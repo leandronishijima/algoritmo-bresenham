@@ -23,6 +23,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import br.com.cg.algoritmos.AlgoritmoBresenham;
 import br.com.cg.model.ComponenteCirculo;
 
 public class TelaInicial extends Application {
@@ -169,7 +170,6 @@ public class TelaInicial extends Application {
 		hLayout.setAlignment(TOP_LEFT);
 
 		paneCirculos = new GridPane();
-		paneCirculos.setAlignment(CENTER);
 		paneCirculos.setHgap(10);
 		paneCirculos.setVgap(10);
 
@@ -201,6 +201,7 @@ public class TelaInicial extends Application {
 		if (!circulo.equals(pontoInicial)) {
 			circulo.selecionaCirculo();
 			pontoFinal = circulo;
+			AlgoritmoBresenham.calcula(pontoInicial, pontoFinal, matrizCirculos);
 		} else
 			pontoFinal = null;
 	}

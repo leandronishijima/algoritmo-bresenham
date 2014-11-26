@@ -1,5 +1,6 @@
 package br.com.cg.model;
 
+import static java.lang.String.format;
 import static javafx.scene.paint.Color.BLUE;
 import static javafx.scene.paint.Color.GREY;
 import javafx.scene.shape.Circle;
@@ -29,6 +30,11 @@ public class ComponenteCirculo extends Circle {
 	
 	public void resetaCor() {
 		setFill(GREY);
+	}
+	
+	@Override
+	public String toString() {
+		return format("[ %d, %d ]", linha, coluna);
 	}
 	
 }
